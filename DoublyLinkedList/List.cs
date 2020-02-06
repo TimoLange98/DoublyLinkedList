@@ -97,6 +97,7 @@ namespace DoublyLinkedList
             while (help != null)
             {
                 action(help.Data);
+                help = help.Next;
             }
         }
 
@@ -150,6 +151,7 @@ namespace DoublyLinkedList
                 var add = new Node<T>(null, data, help);
                 help.Prev = add;
                 First = add;
+                Nodes++;
             }
             else
             {
@@ -158,15 +160,67 @@ namespace DoublyLinkedList
                 help = add;
                 help.Prev.Next = add;
                 help.Next = temp;
+                help.Next.Prev = add;
+                Nodes++;
             }
         }
 
+
+        public int LastIndexOf(T data)
+        {
+            var help = Last;
+            var index = Nodes;
+
+            while(help != null)
+            {
+                if (help.Data.Equals(data))
+                    return index;
+                help = help.Prev;
+                index--;
+            }
+            return -1;
+        }
+        public int LastIndexOf(T data, int start)
+        {
+            var help = Last;
+            var index = Nodes - 1;
+
+            for (int i = index; i != start; i--)
+            {
+                help = help.Prev;
+                index--;
+            }
+
+            while (help != null)
+            {
+                if (help.Data.Equals(data))
+                    return index;
+                help = help.Prev;
+                index--;
+            }
+            return -1;
+        }
         
+
+        private int Length()
+        {
+            var help = First;
+            var result = 0;
+
+            while (help != null)
+            {
+                result++;
+                help = help.Next;
+            }
+            return result;
+        }
+
+
         public void PrintToConsole()
         {
             var help = First;
 
-            
+
             while (help != null)
             {
                 if (help.Next == null)
@@ -180,20 +234,6 @@ namespace DoublyLinkedList
                     help = help.Next;
                 }
             }
-        }
-
-
-        private int Length()
-        {
-            var help = First;
-            var result = 0;
-
-            while (help != null)
-            {
-                result++;
-                help = help.Next;
-            }
-            return result;
         }
 
 
