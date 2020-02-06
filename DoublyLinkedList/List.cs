@@ -95,15 +95,15 @@ namespace DoublyLinkedList
         public void RemoveAt(int index)
         {
             Node<T> help = First;
+            var count = 0;
 
-            if (index == 0)
+            while (count < index && help != null)
             {
-
+                help = help.Next;
+                count++;
             }
-            else
-            {
 
-            }
+            
         }
 
 
