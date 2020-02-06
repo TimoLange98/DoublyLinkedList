@@ -6,6 +6,7 @@ namespace DoublyLinkedList
     {
         public Node<T> First;
         public Node<T> Last;
+        public int Nodes = 0;
 
         public void Add(T data)
         {
@@ -14,12 +15,14 @@ namespace DoublyLinkedList
                 var add = new Node<T>(null, data, null);
                 First = add;
                 Last = add;
+                Nodes++;
             }
             else
             {
                 var add = new Node<T>(Last, data, null);
                 Last.Next = add;
                 Last = add;
+                Nodes++;
             }
         }
 
@@ -39,6 +42,123 @@ namespace DoublyLinkedList
         public void Clear()
         {
             First = Last = null;
+        }
+
+
+        public bool Contains(T data)
+        {
+            var help = First;
+
+            while (help != null)
+            {
+                if (help.Data.Equals(data))
+                    return true;
+                help = help.Next;
+            }
+            return false;
+        }
+
+
+        public bool Exists(Predicate<T> predicate)
+        {
+            var help = First;
+
+            while (help != null)
+            {
+                if (predicate(help.Data))
+                    return true;
+            }
+            return false;
+        }
+
+
+        public T Find(Predicate<T> predicate)
+        {
+            var help = First;
+
+            while (help != null)
+            {
+                if (predicate(help.Data))
+                    return help.Data;
+            }
+            return default;
+        }
+
+
+        public List<T> FindAll(Predicate<T> predicate)
+        {
+            return null;
+        }
+
+        public void ForEach(Action<T> action)
+        {
+            var help = First;
+
+            while (help != null)
+            {
+                action(help.Data);
+            }
+        }
+
+
+        public int IndexOf(T data)
+        {
+            var help = First;
+            var index = 0;
+
+            while (help != null)
+            {
+                if (help.Data.Equals(data))
+                    return index;
+                help = help.Next;
+                index++;
+            }
+            return -1;
+        }
+        public int IndexOf(T data, int start)
+        {
+            var help = First;
+            var index = start;
+
+            for (int i = 0; i < start; i++)
+            {
+                help = help.Next;
+            }
+
+            while (help != null)
+            {
+                if (help.Data.Equals(data))
+                    return index;
+                help = help.Next;
+                index++;
+            }
+            return -1;
+        }
+
+
+        public void Insert(int index, T data)
+        {
+            var help = First;
+
+            for (int i = 0; i < index; i++)
+            {
+                help = help.Next;
+            }
+
+            if (help == First)
+            {
+                var add = new Node<T>(null, data, help);
+                help.Prev = add;
+                First = add;
+            }
+            else
+            {
+                var add = new Node<T>(help.Prev, data, help);
+                var temp = help;
+                help = add;
+                help.Prev.Next = add;
+                help.Next = temp;
+            }
         }
 
         
@@ -90,6 +210,7 @@ namespace DoublyLinkedList
 
             before.Next = help.Next;
             help.Next.Prev = before;
+            Nodes--;
         }
 
         public void RemoveAt(int index)
@@ -125,7 +246,7 @@ namespace DoublyLinkedList
 
         public T[] ToArray()
         {
-            T[] result = new T[Length()];
+            T[] result = new T[Nodes];
             var help = First;
 
             for (int i = 0; i < result.Length; i++)

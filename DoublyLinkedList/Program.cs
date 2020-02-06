@@ -12,7 +12,7 @@ namespace DoublyLinkedList
             myListInt.Add(2);
             myListInt.Add(3);
             myListInt.Add(4);
-            myListInt.Add(5);
+            myListInt.Add(5);                              // 1, 2, 3, 4, 5 
 
             List<int> myListInt2 = new List<int>();
 
@@ -21,9 +21,11 @@ namespace DoublyLinkedList
             myListInt2.Add(8);
             myListInt2.Add(9);
 
-            myListInt.AddRange(myListInt2);
-            myListInt.Reverse();
-            myListInt.Remove(7);
+            myListInt.AddRange(myListInt2);                // 1, 2, 3, 4, 5, 6, 7, 8, 9
+            myListInt.Reverse();                           // 9, 8, 7, 6, 5, 4, 3, 2, 1
+            myListInt.Remove(7);                           // 9, 8, 6, 5, 4, 3, 2, 1
+            myListInt.Insert(0, 10);                       // 10, 9, 8, 6, 5, 4, 3, 2, 1
+            myListInt.Insert(8, 10);                       // 10, 9, 8, 7, 6, 5, 4, 3, 2, 10, 1
 
             myListInt.PrintToConsole();
         }
