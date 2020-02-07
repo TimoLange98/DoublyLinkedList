@@ -4,6 +4,15 @@ namespace DoublyLinkedList
 {
     public class Program
     {
+        public bool Prüfen(int data)
+        {
+            if (data > 9)
+            {
+                return true;
+            }
+            return false;
+        }
+
         static void Main(string[] args)
         {
             List<int> myListInt = new List<int>();
@@ -31,15 +40,17 @@ namespace DoublyLinkedList
             myListInt.Insert(0, 10);                       // 10, 9, 8, 6, 5, 4, 3, 2, 1
             myListInt.Insert(8, 10);                       // 10, 9, 8, 7, 6, 5, 4, 3, 2, 10, 1
 
-            myListInt.RemoveAt(9);                         // 10, 9, 8, 7, 6, 5, 4, 3, 2, 10)
+            myListInt.RemoveAt(9);                         // 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+            //myListInt.RemoveAt(0);                         // 9, 8, 7, 6, 5, 4, 3, 2, 1
 
-            int indexOf = myListInt.IndexOf(10);           // 0
-
-            int lastIndexOf = myListInt.LastIndexOf(10);   // 9
+            myListInt.Remove(1);
 
             myListInt.PrintToConsole();
-            Console.WriteLine(myListInt.Nodes);
-            Console.WriteLine(indexOf + " | " + lastIndexOf);
+
+            //Program p = new Program();
+            //Predicate<int> predicate;
+            //predicate = p.Prüfen;
+            //Console.WriteLine(myListInt.Exists(predicate));
         }
     }
 }

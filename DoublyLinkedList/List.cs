@@ -31,7 +31,7 @@ namespace DoublyLinkedList
         {
             var help = add.First;
 
-            for (int i = 0; i < add.Length(); i++)
+            for (int i = 0; i < add.Count(); i++)
             {
                 Add(help.Data);
                 help = help.Next;
@@ -66,7 +66,7 @@ namespace DoublyLinkedList
             while (help != null)
             {
                 if (predicate(help.Data))
-                    return true;
+                    return true; help = help.Next;
             }
             return false;
         }
@@ -87,8 +87,23 @@ namespace DoublyLinkedList
 
         public List<T> FindAll(Predicate<T> predicate)
         {
-            return null;
+            var help = First;
+            List<T> result = new List<T>();
+
+            while (help != null)
+            {
+                if (predicate(help.Data))
+                {
+                    result.Add(help.Data);
+                }
+                help = help.Next;
+            }
+            return result;
         }
+
+
+
+
 
         public void ForEach(Action<T> action)
         {
@@ -143,8 +158,11 @@ namespace DoublyLinkedList
 
             for (int i = 0; i < index; i++)
             {
+                if (i > Nodes)
+                    throw new Exception("Index outside of the bounds of the List");
+
                 help = help.Next;
-            }
+            } 
 
             if (help == First)
             {
@@ -202,7 +220,7 @@ namespace DoublyLinkedList
         }
         
 
-        private int Length()
+        private int Count()
         {
             var help = First;
             var result = 0;
@@ -241,30 +259,53 @@ namespace DoublyLinkedList
         {
             var help = First;
 
-            while (!help.Data.Equals(value))
+            while (!help.Data.Equals(value))            
             {
+                if (help.Next == null)
+                    return;
+
                 help = help.Next;
             }
 
             var before = help.Prev;
-
             before.Next = help.Next;
-            help.Next.Prev = before;
+            if (help.Next != null)
+                help.Next.Prev = before;
             Nodes--;
         }
 
+
         public void RemoveAt(int index)
         {
-            Node<T> help = First;
-            var count = 0;
+            Node<T> help;
 
-            while (count < index && help != null)
+            if (index < 0 || index > Nodes - 1)
             {
-                help = help.Next;
-                count++;
+                return;
             }
 
-            
+            if (index > Nodes / 2)
+            {
+                help = Last;
+
+                for (int i = 0; i < Nodes - index; i++)
+                {
+                    help = help.Prev;
+                }
+                help.Prev.Next = help.Next;
+                help.Next.Prev = help.Prev;
+            }
+            else
+            {
+                help = First;
+
+                for (int i = 0; i < index; i++)
+                {
+                    help = help.Next;
+                }
+                help.Prev.Next = help.Next;
+                help.Next.Prev = help.Prev;
+            }
         }
 
 
