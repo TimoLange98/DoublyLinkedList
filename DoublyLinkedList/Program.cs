@@ -13,6 +13,20 @@ namespace DoublyLinkedList
             return false;
         }
 
+        public void Verdoppeln(int data)
+        {
+            Console.Write(data * 2 + " -> ");
+        }
+
+        public int IstGroesser(int data, int nextData)
+        {
+            if (data == nextData)
+                return 0;
+            else if (data > nextData)
+                return 1;
+            else return -1;
+        }
+
         static void Main(string[] args)
         {
             List<int> myListInt = new List<int>();
@@ -45,14 +59,27 @@ namespace DoublyLinkedList
 
             myListInt.Remove(1);                           // 9, 8, 6, 5, 4, 3, 2   
 
-            //myListInt.Reverse();                           // 2, 3, 4, 5, 6, 8, 9
-
+            myListInt.Reverse();                           // 2, 3, 4, 5, 6, 8, 9
+            myListInt.Reverse2();                          // 9, 8, 6, 5, 4, 3, 2
             myListInt.PrintToConsole();
 
-            //Program p = new Program();
+            Program p = new Program();
             //Predicate<int> predicate;
             //predicate = p.Prüfen;
             //Console.WriteLine(myListInt.Exists(predicate));
+
+            //Action<int> action;
+            //action = p.Verdoppeln;
+            //myListInt.ForEach(action);
+
+            Func<int, int, int> comp;
+
+            comp = p.IstGroesser;
+
+            myListInt.Sort(comp);
+
+            myListInt.PrintToConsole();
+            
         }
     }
 }

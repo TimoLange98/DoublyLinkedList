@@ -395,13 +395,41 @@ namespace DoublyLinkedList
                 Last = Last.Next;
             }
         }
-
-
-        public void Sort()
+        public void Reverse2()
         {
+            var help = First;
 
+            while (help != null)
+            {
+                var temp = help.Next;
+                help.Next = help.Prev;
+                help.Prev = temp;
+
+                help = help.Prev;
+
+            }
+
+            var first = First;
+            First = Last;
+            Last = first;
         }
 
+
+        public void Sort(Func<T, T, int> compare)
+        {
+            var help = First;
+
+            while (help != null)
+            {
+                if (compare(help.Data, help.Next.Data) == 1)
+                {
+                    SwitchNodes(help, help.Next);
+                }
+
+                help = help.Next;
+            }
+        }
+        
 
         public T[] ToArray()
         {
@@ -415,6 +443,47 @@ namespace DoublyLinkedList
             }
 
             return result;
+        }
+
+
+        public void SwitchNodes(Node<T> node, Node<T> nextNode)
+        {
+            if (node == First)
+            {
+                First = nextNode;
+                First.Prev = null;
+                First.Next = node;
+            }
+
+            else if (node == Last)
+            {
+                Last = node;
+                Last.Next = null;
+                Last.Prev = nextNode;
+            }
+
+            else
+            {
+                var tempNode = node;
+                var tempNextNode = nextNode;
+
+                node = nextNode;
+                nextNode = tempNode;
+
+                node.Prev = tempNode.Prev;
+                node.Next = nextNode;
+
+                nextNode.Prev = node;
+                nextNode.Next = tempNextNode.Next;
+            }
+        }
+    }
+
+    static class MyExtension
+    {
+        public static char GetValue(this string value, int index)
+        {
+            return value[index];
         }
     }
 }
