@@ -45,6 +45,20 @@ namespace DoublyLinkedList
         }
 
 
+        private int Count()
+        {
+            var help = First;
+            var result = 0;
+
+            while (help != null)
+            {
+                result++;
+                help = help.Next;
+            }
+            return result;
+        }
+
+
         public bool Contains(T data)
         {
             var help = First;
@@ -80,6 +94,7 @@ namespace DoublyLinkedList
             {
                 if (predicate(help.Data))
                     return help.Data;
+                help = help.Next;
             }
             return default;
         }
@@ -102,7 +117,30 @@ namespace DoublyLinkedList
         }
 
 
+        public int FindIndex(Predicate<T> predicate)
+        {
+            var help = First;
+            var index = 0;
 
+            while (help != null)
+            {
+                if (predicate(help.Data))
+                    return index;
+                help = help.Next;
+                index++;
+            }
+            return -1;
+        }
+        public int FindIndex(int start, Predicate<T> predicate)
+        {
+            var help = First;
+
+            for (int i = 1; i < start; i++)
+            {
+                return 0;
+            }
+            return 0;
+        }
 
 
         public void ForEach(Action<T> action)
@@ -156,11 +194,13 @@ namespace DoublyLinkedList
         {
             var help = First;
 
+            if (index < 0 || index > Nodes - 1)
+            {
+                throw new Exception("Index outside of the bounds of the List");
+            }
+
             for (int i = 0; i < index; i++)
             {
-                if (i > Nodes)
-                    throw new Exception("Index outside of the bounds of the List");
-
                 help = help.Next;
             } 
 
@@ -220,20 +260,6 @@ namespace DoublyLinkedList
         }
         
 
-        private int Count()
-        {
-            var help = First;
-            var result = 0;
-
-            while (help != null)
-            {
-                result++;
-                help = help.Next;
-            }
-            return result;
-        }
-
-
         public void PrintToConsole()
         {
             var help = First;
@@ -267,11 +293,37 @@ namespace DoublyLinkedList
                 help = help.Next;
             }
 
-            var before = help.Prev;
-            before.Next = help.Next;
-            if (help.Next != null)
-                help.Next.Prev = before;
+            if (help == First)
+            {
+                First = help.Next;
+                First.Prev = null;
+            }
+            else if (help == Last)
+            {
+                Last = help.Prev;
+                Last.Next = null;
+            }
+            else
+            {
+                help.Prev.Next = help.Next;
+                help.Next.Prev = help.Prev;
+            }
             Nodes--;
+        }
+
+
+        public void RemoveAll(T value)
+        {
+            var help = First;
+            
+            while (help != null)
+            {
+                if (help.Data.Equals(value))
+                {
+                    Remove(value);
+                }
+                help = help.Next;
+            }
         }
 
 
@@ -281,7 +333,7 @@ namespace DoublyLinkedList
 
             if (index < 0 || index > Nodes - 1)
             {
-                return;
+                throw new Exception("Index outside of the bounds of the List");
             }
 
             if (index > Nodes / 2)
@@ -292,10 +344,17 @@ namespace DoublyLinkedList
                 {
                     help = help.Prev;
                 }
+                if (help == Last)
+                {
+                    Last = help.Prev;
+                    Last.Next = null;
+                    Nodes--;
+                }
                 help.Prev.Next = help.Next;
                 help.Next.Prev = help.Prev;
+                Nodes--;
             }
-            else
+            else                                                    
             {
                 help = First;
 
@@ -303,8 +362,20 @@ namespace DoublyLinkedList
                 {
                     help = help.Next;
                 }
-                help.Prev.Next = help.Next;
-                help.Next.Prev = help.Prev;
+
+                if (help == First)
+                {
+                    First = help.Next;
+                    First.Prev = null;
+                    Nodes--;
+                }
+                else
+                {
+                    help.Prev.Next = help.Next;
+                    help.Next.Prev = help.Prev;
+                    Nodes--;
+                }
+                
             }
         }
 
@@ -324,6 +395,13 @@ namespace DoublyLinkedList
                 Last = Last.Next;
             }
         }
+
+
+        public void Sort()
+        {
+
+        }
+
 
         public T[] ToArray()
         {

@@ -38,12 +38,14 @@ namespace DoublyLinkedList
 
 
             myListInt.Insert(0, 10);                       // 10, 9, 8, 6, 5, 4, 3, 2, 1
-            myListInt.Insert(8, 10);                       // 10, 9, 8, 7, 6, 5, 4, 3, 2, 10, 1
+            myListInt.Insert(8, 10);                       // 10, 9, 8, 6, 5, 4, 3, 2, 10, 1
 
-            myListInt.RemoveAt(9);                         // 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
-            //myListInt.RemoveAt(0);                         // 9, 8, 7, 6, 5, 4, 3, 2, 1
+            myListInt.RemoveAt(9);                         // 10, 9, 8, 6, 5, 4, 3, 2, 1
+            myListInt.RemoveAt(0);                         // 9, 8, 6, 5, 4, 3, 2, 1
 
-            myListInt.Remove(1);
+            myListInt.Remove(1);                           // 9, 8, 6, 5, 4, 3, 2   
+
+            //myListInt.Reverse();                           // 2, 3, 4, 5, 6, 8, 9
 
             myListInt.PrintToConsole();
 
