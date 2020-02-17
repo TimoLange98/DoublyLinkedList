@@ -190,7 +190,7 @@ namespace DoublyLinkedList
         {
             var help = First;
 
-            if (index < 0 || index > Nodes - 1)
+            if (index < 0 || index > Nodes)
             {
                 throw new Exception("Index outside of the bounds of the List");
             }
@@ -198,9 +198,14 @@ namespace DoublyLinkedList
             for (int i = 0; i < index; i++)
             {
                 help = help.Next;
-            } 
+            }
 
-            if (help == First)
+            if (help == null)
+            {
+                var add = new Node<T>(Last, data, null);
+                Last = add;
+            }
+            else if (help == First)
             {
                 var add = new Node<T>(null, data, help);
                 help.Prev = add;
@@ -411,21 +416,64 @@ namespace DoublyLinkedList
         }
 
 
-        public void Sort(Func<T, T, int> comp)
+        public void BubbleSort(Func<T, T, int> comparison)
         {
-            var help = First;
             var i = 0;
 
             while (i < Nodes)
             {
+                var help = First;
+
                 while (help.Next != null)
                 {
-                    if (comp(help.Data, help.Next.Data) == 1)
-                        SwitchNodes(help, help.Next);
+                    if (comparison(help.Data, help.Next.Data) == 1)
+                        help = SwitchNodes(help, help.Next);
                     else
                         help = help.Next;
                 }
                 i++;
+            }
+        }
+        public void InsertSort(Func<T, T, int> comparison)                              // 9, 8, 6, 5, 4, 3, 2; comp = 9; compIndex = 0; index = 1; pointer = 8;
+        {
+            var comp = First;
+            var compIndex = 0;
+            Node<T> temp = null;
+
+            while (comp != null)
+            {
+                var pointer = First;
+                var index = 0;
+
+                while (pointer != null)
+                {
+                    temp = comp.Next;
+                    if (comparison(comp.Data, pointer.Data) == 1)
+                    {
+                        if (pointer.Next == null)
+                        {
+                            Insert(index + 1, comp.Data);
+                            RemoveAt(compIndex);
+                        }
+                        else if (comparison(comp.Data, pointer.Next.Data) == 1)
+                        {
+                            index++;
+                            pointer = pointer.Next;
+                        }
+                        else
+                        {
+                            Insert(index + 1, comp.Data);
+                            RemoveAt(compIndex);
+                        }
+                    }
+                    else
+                    {
+                        pointer = pointer.Next;
+                        index++;
+                    }
+                }
+                comp = temp;
+                compIndex++;
             }
         }
         
@@ -445,34 +493,51 @@ namespace DoublyLinkedList
         }
 
 
-        private void SwitchNodes(Node<T> node, Node<T> nextNode)        
-        {
-            if (node == First)
-            {
-                var tempNextNodeNext = nextNode.Next;
+        private Node<T> SwitchNodes(Node<T> node, Node<T> nextNode)                             
+        {                                                                                       
+            if (node == First)                                                                  
+            {                                                                           
+                node.Next = nextNode.Next;
+                node.Prev = nextNode;
+
+                nextNode.Next = node;
+                nextNode.Prev = null;
 
                 First = nextNode;
-                First.Prev = null;
                 First.Next = node;
+                First.Next.Next.Prev = node;
 
-                First.Next.Next = tempNextNodeNext;
+                return First.Next;
             }
 
             else if (nextNode == Last)
             {
-                var tempNode = node;
+                node.Next = null;
+                node.Prev = nextNode;
+
+                nextNode.Next = node;
+                nextNode.Prev = node.Prev;
 
                 Last = node;
                 Last.Prev = nextNode;
-                Last.Next = null;
-                Last.Prev.Prev = tempNode.Prev;
+
+                return Last;
             }
 
-            else                                                // 8, 9, 6, 5, 4, 3, 2
+            else                                               
             {
-                node.Prev.Next = nextNode;
-                node.Prev.Next.Next = node;
+                var tempNodePrev = node.Prev;
 
+                node.Next = nextNode.Next;
+                node.Prev = nextNode;
+
+                nextNode.Next = node;
+                nextNode.Prev = tempNodePrev;
+
+                nextNode.Prev.Next = nextNode;
+                nextNode.Prev.Next.Next = node;
+
+                return node;
             }
         }
     }

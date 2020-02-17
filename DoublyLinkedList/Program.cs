@@ -81,11 +81,13 @@ namespace DoublyLinkedList
             //action = p.Verdoppeln;
             //myListInt.ForEach(action);
 
-            Func<int, int, int> comp;
+            Func<int, int, int> comparison;
 
-            comp = p.IstGroesser;
+            comparison = p.IstGroesser;
 
-            myListInt.Sort(comp);
+            //myListInt.BubbleSort(comp);
+
+            myListInt.InsertSort(comparison);
 
             myListInt.PrintToConsole();
 
