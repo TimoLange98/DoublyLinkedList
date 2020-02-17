@@ -6,7 +6,7 @@ namespace DoublyLinkedList
     {
         public Node<T> First;
         public Node<T> Last;
-        public int Nodes = 0;
+        private int Nodes = 0;
 
         public void Add(T data)
         {
@@ -29,33 +29,17 @@ namespace DoublyLinkedList
 
         public void AddRange(List<T> add)
         {
-            var help = add.First;
+            Last.Prev.Next.Next = add.First;
+            Last.Prev.Next.Next.Prev = Last;
 
-            for (int i = 0; i < add.Count(); i++)
-            {
-                Add(help.Data);
-                help = help.Next;
-            }
+            Last = add.Last;
+            Nodes += add.Nodes;
         }
 
 
         public void Clear()
         {
             First = Last = null;
-        }
-
-
-        private int Count()
-        {
-            var help = First;
-            var result = 0;
-
-            while (help != null)
-            {
-                result++;
-                help = help.Next;
-            }
-            return result;
         }
 
 
@@ -73,6 +57,12 @@ namespace DoublyLinkedList
         }
 
 
+        public int Count()
+        {
+            return Nodes;
+        }
+
+
         public bool Exists(Predicate<T> predicate)
         {
             var help = First;
@@ -80,7 +70,9 @@ namespace DoublyLinkedList
             while (help != null)
             {
                 if (predicate(help.Data))
-                    return true; help = help.Next;
+                    return true;
+
+                help = help.Next;
             }
             return false;
         }
@@ -134,12 +126,16 @@ namespace DoublyLinkedList
         public int FindIndex(int start, Predicate<T> predicate)
         {
             var help = First;
+            var index = start;
 
-            for (int i = 1; i < start; i++)
+            while (help != null)
             {
-                return 0;
+                if (predicate(help.Data))
+                    return index;
+                help = help.Next;
+                index++;
             }
-            return 0;
+            return -1;
         }
 
 
@@ -415,18 +411,21 @@ namespace DoublyLinkedList
         }
 
 
-        public void Sort(Func<T, T, int> compare)
+        public void Sort(Func<T, T, int> comp)
         {
             var help = First;
+            var i = 0;
 
-            while (help != null)
+            while (i < Nodes)
             {
-                if (compare(help.Data, help.Next.Data) == 1)
+                while (help.Next != null)
                 {
-                    SwitchNodes(help, help.Next);
+                    if (comp(help.Data, help.Next.Data) == 1)
+                        SwitchNodes(help, help.Next);
+                    else
+                        help = help.Next;
                 }
-
-                help = help.Next;
+                i++;
             }
         }
         
@@ -446,44 +445,43 @@ namespace DoublyLinkedList
         }
 
 
-        public void SwitchNodes(Node<T> node, Node<T> nextNode)
+        private void SwitchNodes(Node<T> node, Node<T> nextNode)        
         {
             if (node == First)
             {
+                var tempNextNodeNext = nextNode.Next;
+
                 First = nextNode;
                 First.Prev = null;
                 First.Next = node;
+
+                First.Next.Next = tempNextNodeNext;
             }
 
-            else if (node == Last)
-            {
-                Last = node;
-                Last.Next = null;
-                Last.Prev = nextNode;
-            }
-
-            else
+            else if (nextNode == Last)
             {
                 var tempNode = node;
-                var tempNextNode = nextNode;
 
-                node = nextNode;
-                nextNode = tempNode;
+                Last = node;
+                Last.Prev = nextNode;
+                Last.Next = null;
+                Last.Prev.Prev = tempNode.Prev;
+            }
 
-                node.Prev = tempNode.Prev;
-                node.Next = nextNode;
+            else                                                // 8, 9, 6, 5, 4, 3, 2
+            {
+                node.Prev.Next = nextNode;
+                node.Prev.Next.Next = node;
 
-                nextNode.Prev = node;
-                nextNode.Next = tempNextNode.Next;
             }
         }
     }
 
-    static class MyExtension
-    {
-        public static char GetValue(this string value, int index)
-        {
-            return value[index];
-        }
-    }
+    //static class MyExtension
+    //{
+    //    public static char GetValue(this string value, int index)
+    //    {
+    //        return value[index];
+    //    }
+    //}
 }

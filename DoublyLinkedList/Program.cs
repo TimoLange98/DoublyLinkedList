@@ -7,11 +7,18 @@ namespace DoublyLinkedList
         public bool Prüfen(int data)
         {
             if (data > 9)
-            {
                 return true;
-            }
             return false;
         }
+
+
+        public bool Prüfen2(int data)
+        {
+            if (data < 0)
+                return true;
+            return false;
+        }
+
 
         public void Verdoppeln(int data)
         {
@@ -50,7 +57,6 @@ namespace DoublyLinkedList
 
             myListInt.Remove(7);                           // 9, 8, 6, 5, 4, 3, 2, 1
 
-
             myListInt.Insert(0, 10);                       // 10, 9, 8, 6, 5, 4, 3, 2, 1
             myListInt.Insert(8, 10);                       // 10, 9, 8, 6, 5, 4, 3, 2, 10, 1
 
@@ -61,11 +67,14 @@ namespace DoublyLinkedList
 
             myListInt.Reverse();                           // 2, 3, 4, 5, 6, 8, 9
             myListInt.Reverse2();                          // 9, 8, 6, 5, 4, 3, 2
+
             myListInt.PrintToConsole();
 
+
             Program p = new Program();
-            //Predicate<int> predicate;
-            //predicate = p.Prüfen;
+
+            //Predicate<int> predicate = p.Prüfen;
+
             //Console.WriteLine(myListInt.Exists(predicate));
 
             //Action<int> action;
@@ -79,7 +88,7 @@ namespace DoublyLinkedList
             myListInt.Sort(comp);
 
             myListInt.PrintToConsole();
-            
+
         }
     }
 }
