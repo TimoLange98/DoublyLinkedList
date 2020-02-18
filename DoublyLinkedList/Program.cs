@@ -25,7 +25,7 @@ namespace DoublyLinkedList
             Console.Write(data * 2 + " -> ");
         }
 
-        public int IstGroesser(int data, int nextData)
+        public int IstGroesserInt(int data, int nextData)
         {
             if (data == nextData)
                 return 0;
@@ -34,62 +34,46 @@ namespace DoublyLinkedList
             else return -1;
         }
 
+        public int IstGroesserString(string data, string nextData)
+        {
+            if (data.Length == nextData.Length)
+                return 0;
+            else if (data.Length > nextData.Length)
+                return 1;
+            else return -1;
+        }
+
         static void Main(string[] args)
         {
-            List<int> myListInt = new List<int>();
-
-            myListInt.Add(1);
-            myListInt.Add(2);
-            myListInt.Add(3);
-            myListInt.Add(4);
-            myListInt.Add(5);                              // 1, 2, 3, 4, 5 
-
-            List<int> myListInt2 = new List<int>();
-
-            myListInt2.Add(6);
-            myListInt2.Add(7);
-            myListInt2.Add(8);
-            myListInt2.Add(9);
-
-            myListInt.AddRange(myListInt2);                // 1, 2, 3, 4, 5, 6, 7, 8, 9
-
-            myListInt.Reverse();                           // 9, 8, 7, 6, 5, 4, 3, 2, 1
-
-            myListInt.Remove(7);                           // 9, 8, 6, 5, 4, 3, 2, 1
-
-            myListInt.Insert(0, 10);                       // 10, 9, 8, 6, 5, 4, 3, 2, 1
-            myListInt.Insert(8, 10);                       // 10, 9, 8, 6, 5, 4, 3, 2, 10, 1
-
-            myListInt.RemoveAt(9);                         // 10, 9, 8, 6, 5, 4, 3, 2, 1
-            myListInt.RemoveAt(0);                         // 9, 8, 6, 5, 4, 3, 2, 1
-
-            myListInt.Remove(1);                           // 9, 8, 6, 5, 4, 3, 2   
-
-            myListInt.Reverse();                           // 2, 3, 4, 5, 6, 8, 9
-            myListInt.Reverse2();                          // 9, 8, 6, 5, 4, 3, 2
-
-            myListInt.PrintToConsole();
-
-
             Program p = new Program();
 
-            //Predicate<int> predicate = p.Prüfen;
+            Func<int, int, int> comparisonInt;
 
-            //Console.WriteLine(myListInt.Exists(predicate));
+            comparisonInt = p.IstGroesserInt;
 
-            //Action<int> action;
-            //action = p.Verdoppeln;
-            //myListInt.ForEach(action);
 
-            Func<int, int, int> comparison;
 
-            comparison = p.IstGroesser;
 
-            //myListInt.BubbleSort(comp);
 
-            myListInt.InsertSort(comparison);
+            List<int> myListInt = new List<int>();
 
-            myListInt.PrintToConsole();
+            myListInt.Add(5);
+            myListInt.Add(134);
+            myListInt.Add(56);
+            myListInt.Add(15);
+            myListInt.Add(2);
+            myListInt.Add(579);
+            myListInt.Add(24);                                  // 5, 134, 56, 15, 2, 579, 24
+
+            //myListInt.PrintToConsole(); Console.WriteLine();
+
+            //myListInt.ReverseOnlyData();                        // 24, 579, 2, 15, 56, 134, 5
+
+            //myListInt.PrintToConsole(); Console.WriteLine();
+
+            myListInt.SortInsertion(comparisonInt);             // 2, 5, 15, 24, 56, 134, 579
+
+            myListInt.PrintToConsole(); Console.WriteLine();
 
         }
     }

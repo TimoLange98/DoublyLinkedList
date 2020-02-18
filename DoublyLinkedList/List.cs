@@ -192,7 +192,9 @@ namespace DoublyLinkedList
 
             if (index < 0 || index > Nodes)
             {
-                throw new Exception("Index outside of the bounds of the List");
+                //throw new Exception("Index outside of the bounds of the List");
+                Console.WriteLine("Fehler");
+                return;
             }
 
             for (int i = 0; i < index; i++)
@@ -334,7 +336,9 @@ namespace DoublyLinkedList
 
             if (index < 0 || index > Nodes - 1)
             {
-                throw new Exception("Index outside of the bounds of the List");
+                //throw new Exception("Index outside of the bounds of the List");
+                Console.WriteLine("Fehler");
+                return;
             }
 
             if (index > Nodes / 2)
@@ -414,9 +418,26 @@ namespace DoublyLinkedList
             First = Last;
             Last = first;
         }
+        public void ReverseOnlyData()
+        {
+            var helpLeft = First;
+            var helpRight = Last;
+
+            var i = 0;
+
+            while(i < Nodes / 2)
+            {
+                SwitchData(helpLeft, helpRight);
+
+                helpLeft = helpLeft.Next;
+                helpRight = helpRight.Prev;
+
+                i++;
+            }
+        }
 
 
-        public void BubbleSort(Func<T, T, int> comparison)
+        public void SortBubble(Func<T, T, int> comparison)
         {
             var i = 0;
 
@@ -427,56 +448,65 @@ namespace DoublyLinkedList
                 while (help.Next != null)
                 {
                     if (comparison(help.Data, help.Next.Data) == 1)
-                        help = SwitchNodes(help, help.Next);
+                    {
+                        SwitchData(help, help.Next);
+
+                        help = help.Next;
+                    }
                     else
                         help = help.Next;
                 }
                 i++;
             }
         }
-        public void InsertSort(Func<T, T, int> comparison)                              // 9, 8, 6, 5, 4, 3, 2; comp = 9; compIndex = 0; index = 1; pointer = 8;
+        public void SortInsertion(Func<T, T, int> comparison)                                                // 5, 134, 56, 15, 2, 579, 24
         {
             var comp = First;
-            var compIndex = 0;
-            Node<T> temp = null;
+            var i = 0;
+            var count = 0;
 
-            while (comp != null)
+            while (i < Nodes - 1)
             {
-                var pointer = First;
+                var help = First;
                 var index = 0;
 
-                while (pointer != null)
+                while (help != null)
                 {
-                    temp = comp.Next;
-                    if (comparison(comp.Data, pointer.Data) == 1)
+                    if (comparison(comp.Data, help.Data) == 1)
                     {
-                        if (pointer.Next == null)
-                        {
-                            Insert(index + 1, comp.Data);
-                            RemoveAt(compIndex);
-                        }
-                        else if (comparison(comp.Data, pointer.Next.Data) == 1)
-                        {
-                            index++;
-                            pointer = pointer.Next;
-                        }
-                        else
-                        {
-                            Insert(index + 1, comp.Data);
-                            RemoveAt(compIndex);
-                        }
+                        count++;
+                        index = count;
+                        help = help.Next;
                     }
                     else
                     {
-                        pointer = pointer.Next;
-                        index++;
+                        count++;
+                        help = help.Next;
                     }
                 }
-                comp = temp;
-                compIndex++;
+
+                if (index != 0)
+                {
+                    Insert(index, comp.Data);
+                    RemoveAt(i);
+                }
+
+                i++;
+                comp = comp.Next;
             }
         }
-        
+
+
+        private void SwitchData(Node<T> node1, Node<T> node2)
+        {
+            if (node1 == null || node2 == null)
+                return;
+
+            var tempData = node1.Data;
+            node1.Data = node2.Data;
+            node2.Data = tempData;
+        }
+
 
         public T[] ToArray()
         {
@@ -492,61 +522,12 @@ namespace DoublyLinkedList
             return result;
         }
 
-
-        private Node<T> SwitchNodes(Node<T> node, Node<T> nextNode)                             
-        {                                                                                       
-            if (node == First)                                                                  
-            {                                                                           
-                node.Next = nextNode.Next;
-                node.Prev = nextNode;
-
-                nextNode.Next = node;
-                nextNode.Prev = null;
-
-                First = nextNode;
-                First.Next = node;
-                First.Next.Next.Prev = node;
-
-                return First.Next;
-            }
-
-            else if (nextNode == Last)
-            {
-                node.Next = null;
-                node.Prev = nextNode;
-
-                nextNode.Next = node;
-                nextNode.Prev = node.Prev;
-
-                Last = node;
-                Last.Prev = nextNode;
-
-                return Last;
-            }
-
-            else                                               
-            {
-                var tempNodePrev = node.Prev;
-
-                node.Next = nextNode.Next;
-                node.Prev = nextNode;
-
-                nextNode.Next = node;
-                nextNode.Prev = tempNodePrev;
-
-                nextNode.Prev.Next = nextNode;
-                nextNode.Prev.Next.Next = node;
-
-                return node;
-            }
-        }
     }
 
-    //static class MyExtension
-    //{
-    //    public static char GetValue(this string value, int index)
-    //    {
-    //        return value[index];
-    //    }
-    //}
+
 }
+
+
+
+
+
