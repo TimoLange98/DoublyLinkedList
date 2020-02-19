@@ -193,7 +193,7 @@ namespace DoublyLinkedList
             if (index < 0 || index > Nodes)
             {
                 //throw new Exception("Index outside of the bounds of the List");
-                Console.WriteLine("Fehler");
+                Console.WriteLine($"Fehler bei Index {index}");
                 return;
             }
 
@@ -337,7 +337,7 @@ namespace DoublyLinkedList
             if (index < 0 || index > Nodes - 1)
             {
                 //throw new Exception("Index outside of the bounds of the List");
-                Console.WriteLine("Fehler");
+                Console.WriteLine($"Fehler bei Index {index}");
                 return;
             }
 
@@ -463,12 +463,12 @@ namespace DoublyLinkedList
         {
             var comp = First;
             var i = 0;
-            var count = 0;
 
             while (i < Nodes - 1)
             {
                 var help = First;
                 var index = 0;
+                var count = 0;
 
                 while (help != null)
                 {
@@ -478,17 +478,24 @@ namespace DoublyLinkedList
                         index = count;
                         help = help.Next;
                     }
-                    else
-                    {
-                        count++;
-                        help = help.Next;
-                    }
+                    help = help.Next;
                 }
 
                 if (index != 0)
                 {
-                    Insert(index, comp.Data);
-                    RemoveAt(i);
+                    if (index <= 1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        PrintToConsole();
+                        Console.WriteLine("Index: " + index);
+                        Console.WriteLine("Data: " + comp.Data);
+                        Console.ReadLine();
+                        Insert(index, comp.Data);
+                        RemoveAt(i);
+                    }
                 }
 
                 i++;

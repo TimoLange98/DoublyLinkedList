@@ -51,9 +51,7 @@ namespace DoublyLinkedList
 
             comparisonInt = p.IstGroesserInt;
 
-
-
-
+            //--------------------------------------------------------------------------------------------------------------
 
             List<int> myListInt = new List<int>();
 
@@ -63,17 +61,15 @@ namespace DoublyLinkedList
             myListInt.Add(15);
             myListInt.Add(2);
             myListInt.Add(579);
-            myListInt.Add(24);                                  // 5, 134, 56, 15, 2, 579, 24
+            myListInt.Add(24);                                  
+            //myListInt.PrintToConsole();                         // 5, 134, 56, 15, 2, 579, 24
+            Console.WriteLine();
 
-            //myListInt.PrintToConsole(); Console.WriteLine();
-
-            //myListInt.ReverseOnlyData();                        // 24, 579, 2, 15, 56, 134, 5
-
-            //myListInt.PrintToConsole(); Console.WriteLine();
+            //--------------------------------------------------------------------------------------------------------------
 
             myListInt.SortInsertion(comparisonInt);             // 2, 5, 15, 24, 56, 134, 579
 
-            myListInt.PrintToConsole(); Console.WriteLine();
+            myListInt.PrintToConsole(); 
 
         }
     }
